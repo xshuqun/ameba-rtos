@@ -239,4 +239,8 @@ void vAssertCalled(const char *pcFile, uint32_t ulLine);
 
 #endif /* __IASMARM__ */
 
+#if defined(CONFIG_MATTER) && CONFIG_MATTER
+#include "FreeRTOSConfig_matter.h"
+#endif /* CONFIG_MATTER */
+
 #endif /* FREERTOS_CONFIG_H */

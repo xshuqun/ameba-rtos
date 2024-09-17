@@ -499,4 +499,13 @@ typedef unsigned char	BOOLEAN, *PBOOLEAN;
 #define	__restrict			/* Ignore */
 #endif
 
+#if defined(CHIP_PROJECT) && CHIP_PROJECT
+#ifdef boolean
+#undef boolean
+#endif
+#ifdef IN
+#undef IN
+#endif
+#endif
+
 #endif// __BASIC_TYPES_H__

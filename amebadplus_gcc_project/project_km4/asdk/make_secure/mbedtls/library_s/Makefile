@@ -6,7 +6,11 @@ include $(MAKE_INCLUDE_GEN)
 #*****************************************************************************#
 #                               VARIABLES	                              #
 #*****************************************************************************#
+ifeq ($(CONFIG_MATTER_SECURE_EN),y)
+DIR = $(BASEDIR)/component/ssl/mbedtls-2.28.1
+else
 DIR = $(BASEDIR)/component/ssl/mbedtls-2.16.9
+endif
 
 MODULE_IFLAGS += -DCONFIG_BUILD_SECURE=1
 

@@ -1,0 +1,102 @@
+diff --git a/examples/all-clusters-app/all-clusters-common/src/dishwasher-mode.cpp b/examples/all-clusters-app/all-clusters-common/src/dishwasher-mode.cpp
+index 607bb55787..065569a832 100644
+--- a/examples/all-clusters-app/all-clusters-common/src/dishwasher-mode.cpp
++++ b/examples/all-clusters-app/all-clusters-common/src/dishwasher-mode.cpp
+@@ -101,6 +101,6 @@ void emberAfDishwasherModeClusterInitCallback(chip::EndpointId endpointId)
+     VerifyOrDie(gDishwasherModeDelegate == nullptr && gDishwasherModeInstance == nullptr);
+     gDishwasherModeDelegate = new DishwasherMode::DishwasherModeDelegate;
+     gDishwasherModeInstance =
+-        new ModeBase::Instance(gDishwasherModeDelegate, 0x1, DishwasherMode::Id, chip::to_underlying(Feature::kOnOff));
++        new ModeBase::Instance(gDishwasherModeDelegate, 0x1, DishwasherMode::Id, 0);
+     gDishwasherModeInstance->Init();
+ }
+diff --git a/examples/all-clusters-app/all-clusters-common/src/laundry-washer-mode.cpp b/examples/all-clusters-app/all-clusters-common/src/laundry-washer-mode.cpp
+index 16bb21158b..27070edcf1 100644
+--- a/examples/all-clusters-app/all-clusters-common/src/laundry-washer-mode.cpp
++++ b/examples/all-clusters-app/all-clusters-common/src/laundry-washer-mode.cpp
+@@ -100,6 +100,6 @@ void emberAfLaundryWasherModeClusterInitCallback(chip::EndpointId endpointId)
+     VerifyOrDie(gLaundryWasherModeDelegate == nullptr && gLaundryWasherModeInstance == nullptr);
+     gLaundryWasherModeDelegate = new LaundryWasherMode::LaundryWasherModeDelegate;
+     gLaundryWasherModeInstance =
+-        new ModeBase::Instance(gLaundryWasherModeDelegate, 0x1, LaundryWasherMode::Id, chip::to_underlying(Feature::kOnOff));
++        new ModeBase::Instance(gLaundryWasherModeDelegate, 0x1, LaundryWasherMode::Id, 0);
+     gLaundryWasherModeInstance->Init();
+ }
+diff --git a/examples/all-clusters-app/all-clusters-common/src/microwave-oven-mode.cpp b/examples/all-clusters-app/all-clusters-common/src/microwave-oven-mode.cpp
+index a7ab998dbd..a8aa26422e 100644
+--- a/examples/all-clusters-app/all-clusters-common/src/microwave-oven-mode.cpp
++++ b/examples/all-clusters-app/all-clusters-common/src/microwave-oven-mode.cpp
+@@ -101,6 +101,6 @@ void emberAfMicrowaveOvenModeClusterInitCallback(chip::EndpointId endpointId)
+     VerifyOrDie(gMicrowaveOvenModeDelegate == nullptr && gMicrowaveOvenModeInstance == nullptr);
+     gMicrowaveOvenModeDelegate = new MicrowaveOvenMode::ExampleMicrowaveOvenModeDelegate;
+     gMicrowaveOvenModeInstance =
+-        new ModeBase::Instance(gMicrowaveOvenModeDelegate, endpointId, MicrowaveOvenMode::Id, chip::to_underlying(Feature::kOnOff));
++        new ModeBase::Instance(gMicrowaveOvenModeDelegate, endpointId, MicrowaveOvenMode::Id, 0);
+     gMicrowaveOvenModeInstance->Init();
+ }
+diff --git a/examples/all-clusters-app/all-clusters-common/src/resource-monitoring-delegates.cpp b/examples/all-clusters-app/all-clusters-common/src/resource-monitoring-delegates.cpp
+index e0924b8b5c..445bf18fa4 100644
+--- a/examples/all-clusters-app/all-clusters-common/src/resource-monitoring-delegates.cpp
++++ b/examples/all-clusters-app/all-clusters-common/src/resource-monitoring-delegates.cpp
+@@ -30,11 +30,9 @@ using namespace chip::app::Clusters::HepaFilterMonitoring;
+ using chip::Protocols::InteractionModel::Status;
+ 
+ constexpr std::bitset<4> gHepaFilterFeatureMap{ static_cast<uint32_t>(ResourceMonitoring::Feature::kCondition) |
+-                                                static_cast<uint32_t>(ResourceMonitoring::Feature::kWarning) |
+-                                                static_cast<uint32_t>(ResourceMonitoring::Feature::kReplacementProductList) };
++                                                static_cast<uint32_t>(ResourceMonitoring::Feature::kWarning) };
+ constexpr std::bitset<4> gActivatedCarbonFeatureMap{ static_cast<uint32_t>(ResourceMonitoring::Feature::kCondition) |
+-                                                     static_cast<uint32_t>(ResourceMonitoring::Feature::kWarning) |
+-                                                     static_cast<uint32_t>(ResourceMonitoring::Feature::kReplacementProductList) };
++                                                     static_cast<uint32_t>(ResourceMonitoring::Feature::kWarning) };
+ 
+ static ActivatedCarbonFilterMonitoringDelegate * gActivatedCarbonFilterDelegate = nullptr;
+ static ResourceMonitoring::Instance * gActivatedCarbonFilterInstance            = nullptr;
+diff --git a/examples/all-clusters-app/all-clusters-common/src/rvc-modes.cpp b/examples/all-clusters-app/all-clusters-common/src/rvc-modes.cpp
+index 627709a8c3..be2ae85372 100644
+--- a/examples/all-clusters-app/all-clusters-common/src/rvc-modes.cpp
++++ b/examples/all-clusters-app/all-clusters-common/src/rvc-modes.cpp
+@@ -124,7 +124,7 @@ void emberAfRvcRunModeClusterInitCallback(chip::EndpointId endpointId)
+     VerifyOrDie(gRvcRunModeDelegate == nullptr && gRvcRunModeInstance == nullptr);
+     gRvcRunModeDelegate = new RvcRunMode::RvcRunModeDelegate;
+     gRvcRunModeInstance =
+-        new ModeBase::Instance(gRvcRunModeDelegate, 0x1, RvcRunMode::Id, chip::to_underlying(RvcRunMode::Feature::kNoFeatures));
++        new ModeBase::Instance(gRvcRunModeDelegate, 0x1, RvcRunMode::Id, 0);
+     gRvcRunModeInstance->Init();
+ }
+ 
+@@ -214,6 +214,6 @@ void emberAfRvcCleanModeClusterInitCallback(chip::EndpointId endpointId)
+     VerifyOrDie(gRvcCleanModeDelegate == nullptr && gRvcCleanModeInstance == nullptr);
+     gRvcCleanModeDelegate = new RvcCleanMode::RvcCleanModeDelegate;
+     gRvcCleanModeInstance =
+-        new ModeBase::Instance(gRvcCleanModeDelegate, 0x1, RvcCleanMode::Id, chip::to_underlying(RvcRunMode::Feature::kNoFeatures));
++        new ModeBase::Instance(gRvcCleanModeDelegate, 0x1, RvcCleanMode::Id, 0);
+     gRvcCleanModeInstance->Init();
+ }
+diff --git a/examples/all-clusters-app/all-clusters-common/src/tcc-mode.cpp b/examples/all-clusters-app/all-clusters-common/src/tcc-mode.cpp
+index 8f3c865aec..49e1f2137e 100644
+--- a/examples/all-clusters-app/all-clusters-common/src/tcc-mode.cpp
++++ b/examples/all-clusters-app/all-clusters-common/src/tcc-mode.cpp
+@@ -94,7 +94,6 @@ void emberAfRefrigeratorAndTemperatureControlledCabinetModeClusterInitCallback(c
+     VerifyOrDie(endpointId == 1); // this cluster is only enabled for endpoint 1.
+     VerifyOrDie(gTccModeDelegate == nullptr && gTccModeInstance == nullptr);
+     gTccModeDelegate = new RefrigeratorAndTemperatureControlledCabinetMode::TccModeDelegate;
+-    gTccModeInstance = new ModeBase::Instance(gTccModeDelegate, 0x1, RefrigeratorAndTemperatureControlledCabinetMode::Id,
+-                                              chip::to_underlying(Feature::kOnOff));
++    gTccModeInstance = new ModeBase::Instance(gTccModeDelegate, 0x1, RefrigeratorAndTemperatureControlledCabinetMode::Id, 0);
+     gTccModeInstance->Init();
+ }
+diff --git a/examples/microwave-oven-app/microwave-oven-common/include/microwave-oven-device.h b/examples/microwave-oven-app/microwave-oven-common/include/microwave-oven-device.h
+index 7799ae6fc7..73c08fb474 100644
+--- a/examples/microwave-oven-app/microwave-oven-common/include/microwave-oven-device.h
++++ b/examples/microwave-oven-app/microwave-oven-common/include/microwave-oven-device.h
+@@ -47,8 +47,7 @@ public:
+         mOperationalStateInstance(this, aClustersEndpoint),
+         mMicrowaveOvenModeInstance(this, aClustersEndpoint, MicrowaveOvenMode::Id, 0),
+         mMicrowaveOvenControlInstance(this, aClustersEndpoint, MicrowaveOvenControl::Id,
+-                                      BitMask<MicrowaveOvenControl::Feature>(MicrowaveOvenControl::Feature::kPowerAsNumber,
+-                                                                             MicrowaveOvenControl::Feature::kPowerNumberLimits),
++                                      BitMask<MicrowaveOvenControl::Feature>(MicrowaveOvenControl::Feature::kPowerAsNumber),
+                                       mOperationalStateInstance, mMicrowaveOvenModeInstance)
+     {}
+ 

@@ -49,6 +49,13 @@
 extern "C" {
 #endif
 
+/* Added by Realtek start */
+#if defined(CHIP_PROJECT) && CHIP_PROJECT
+#define IN_ADDR_T_DEFINED
+typedef __uint32_t in_addr_t;
+#endif
+/* Added by Realtek end */
+
 /* If your port already typedef's in_addr_t, define IN_ADDR_T_DEFINED
    to prevent this code from redefining it. */
 #if !defined(in_addr_t) && !defined(IN_ADDR_T_DEFINED) && !defined(_IN_ADDR_T_DECLARED) //* Added by Realtek */

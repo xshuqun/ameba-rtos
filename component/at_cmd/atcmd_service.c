@@ -18,6 +18,11 @@
 #include "atcmd_wifi.h"
 #endif
 
+#if defined(CONFIG_MATTER) && CONFIG_MATTER
+extern void at_matter_init(void);
+extern void fATmattershell(void *arg);
+#endif
+
 //======================================================
 struct list_head log_hash[ATC_INDEX_NUM];
 
@@ -52,6 +57,9 @@ log_init_t log_init_table[] = {
 
 #ifdef CONFIG_ATCMD_IO_UART
 	atio_uart_init,
+#endif
+#if defined(CONFIG_MATTER) && CONFIG_MATTER
+	at_matter_init,
 #endif
 };
 
@@ -186,11 +194,20 @@ void *atcmd_handler(char *cmd)
 	char tok[33] = {0};//'\0'
 	char *tokSearch = NULL;
 	int prefix_length = strlen(atcmd_prefix);
+#if defined(CONFIG_MATTER) && CONFIG_MATTER
+	const char *matter_start = "ATmatter ";
+	int matter_length = strlen(matter_start);
+#endif
 
 	if (strncmp(cmd, atcmd_prefix, prefix_length) != 0) {
 		return NULL;
 	}
 
+#if defined(CONFIG_MATTER) && CONFIG_MATTER
+	if (strncmp(cmd, matter_start, matter_length) == 0) {
+		token = strsep(&copy, " ");
+	} else
+#endif
 	token = strsep(&copy, "=");
 	param = strsep(&copy, "\0");
 

@@ -136,6 +136,11 @@ int netif_get_idx(struct netif *pnetif);
 uint32_t LwIP_GetXID(uint8_t idx);
 uint32_t LwIP_GetLEASETIME(uint8_t idx);
 uint32_t LwIP_GetRENEWTIME(uint8_t idx);
+
+#if defined(CONFIG_MATTER) && CONFIG_MATTER
+#include "lwip_netconf_matter.h"
+#endif
+
 #ifdef __cplusplus
 }
 #endif

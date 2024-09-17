@@ -230,7 +230,11 @@ enum {
 
 #define VFS_DBG_LEVEL VFS_ERROR
 
+#ifdef CONFIG_MATTER_VFS_DBG
+#define VFS_DBG_ON	CONFIG_MATTER_VFS_DBG
+#else
 #define VFS_DBG_ON	1
+#endif
 #if VFS_DBG_ON
 #define VFS_DBG(level, fmt, arg...)     \
 do {\

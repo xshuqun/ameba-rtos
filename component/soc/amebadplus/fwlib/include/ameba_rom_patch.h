@@ -7,6 +7,12 @@
 #ifndef _AMEBA_ROM_PATCH_H_
 #define _AMEBA_ROM_PATCH_H_
 
+#if defined(CHIP_PROJECT) && CHIP_PROJECT
+#ifndef IN
+#define IN
+#endif
+#endif
+
 /* Exported constants --------------------------------------------------------*/
 /** @defgroup ROM_PATCH_Exported_Constants ROM_PATCH Exported Constants
   * @{
@@ -44,5 +50,15 @@ _LONG_CALL_ int TRNG_get_random_bytes_f_rng(void *p_rng, unsigned char *output, 
 /**
   * @}
   */
+
+#if defined(CONFIG_MATTER) && CONFIG_MATTER
+#define rtw_get_random_bytes TRNG_get_random_bytes
+#endif
+
+#if defined(CHIP_PROJECT) && CHIP_PROJECT
+#ifdef IN
+#undef IN
+#endif
+#endif
 
 #endif /* _AMEBA_ROM_PATCH_H_ */

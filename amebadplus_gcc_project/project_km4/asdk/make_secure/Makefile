@@ -11,6 +11,9 @@ COMPONENT += img3
 COMPONENT += test
 COMPONENT += fwlib
 COMPONENT += os
+ifeq ($(CONFIG_MATTER_SECURE_EN),y)
+COMPONENT += mbedtls
+endif
 #COMPONENT += mbedtls
 
 COMPONENT_CLEAN := img3

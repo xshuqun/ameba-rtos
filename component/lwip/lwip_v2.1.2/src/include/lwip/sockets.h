@@ -468,6 +468,9 @@ typedef struct ipv6_mreq {
 
 /* FD_SET used for lwip_select */
 #ifndef FD_SET
+#if defined(CHIP_PROJECT) && CHIP_PROJECT
+#define _SYS_SELECT_H
+#endif
 #undef  FD_SETSIZE
 /* Make FD_SETSIZE match NUM_SOCKETS in socket.c */
 #define FD_SETSIZE    MEMP_NUM_NETCONN
@@ -681,6 +684,12 @@ int lwip_inet_pton(int af, const char *src, void *dst);
 #endif /* LWIP_COMPAT_SOCKETS != 2 */
 
 #endif /* LWIP_COMPAT_SOCKETS */
+
+#if defined(CHIP_PROJECT) && CHIP_PROJECT
+#ifdef bind
+#undef bind
+#endif
+#endif
 
 #ifdef __cplusplus
 }

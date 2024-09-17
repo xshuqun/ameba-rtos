@@ -7,6 +7,12 @@
 #ifndef _AMEBA_IPSEC_H_
 #define _AMEBA_IPSEC_H_
 
+#if defined(CHIP_PROJECT) && CHIP_PROJECT
+#ifndef IN
+#define IN
+#endif
+#endif
+
 /* AUTO_GEN_START */
 
 /** @addtogroup Ameba_Periph_Driver
@@ -749,6 +755,11 @@ int rtl_cryptoEngine_init(void)
 		CRYPTO_MemDump((const u8*)(start), size, (char*)(str_header)); \
 	}
 
+#if defined(CHIP_PROJECT) && CHIP_PROJECT
+#ifdef IN
+#undef IN
+#endif
+#endif
 
 /* MANUAL_GEN_END */
 

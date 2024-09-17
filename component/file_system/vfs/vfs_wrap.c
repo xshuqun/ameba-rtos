@@ -253,7 +253,15 @@ int __wrap_remove(const char *filename)
 	}
 
 	int ret = 0;
+#if defined(CONFIG_MATTER) && CONFIG_MATTER //avoid stack overflow during rt_kv_deinit
+	char *name = NULL;
+	name = rtos_mem_zmalloc(1024);
+	if (name == NULL) {
+		return -1;
+	}
+#else
 	char name[1024] = {0};
+#endif
 	int prefix_len = 0;
 	int user_id = 0;
 	int vfs_id = find_vfs_number(filename, &prefix_len, &user_id);
@@ -274,12 +282,25 @@ int __wrap_remove(const char *filename)
 		temp[0] = drv_id + '0';
 		temp[1] = ':';
 		temp[2] = '/';
+#if defined(CONFIG_MATTER) && CONFIG_MATTER
+		DiagSnPrintf(name, 1024, "%s%s", temp, filename + prefix_len);
+#else
 		DiagSnPrintf(name, sizeof(name), "%s%s", temp, filename + prefix_len);
+#endif
 	} else {
+#if defined(CONFIG_MATTER) && CONFIG_MATTER
+		DiagSnPrintf(name, 1024, "%s", filename + prefix_len);
+#else
 		DiagSnPrintf(name, sizeof(name), "%s", filename + prefix_len);
+#endif
 	}
 
 	ret = vfs.drv[vfs_id]->remove(name);
+#if defined(CONFIG_MATTER) && CONFIG_MATTER
+	if (name) {
+		rtos_mem_free(name);
+	}
+#endif
 	return ret;
 }
 

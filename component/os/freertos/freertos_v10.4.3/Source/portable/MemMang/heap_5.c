@@ -306,6 +306,28 @@ size_t xPortGetMinimumEverFreeHeapSize(void)
 }
 /*-----------------------------------------------------------*/
 
+#if defined(CONFIG_MATTER) && CONFIG_MATTER
+size_t xPortGetTotalHeapSize( void )
+{
+#if CONFIG_DYNAMIC_HEAP_SIZE
+	return configTOTAL_HEAP0_SIZE;
+#else
+	return configTOTAL_HEAP_SIZE;
+#endif
+}
+/*-----------------------------------------------------------*/
+
+void xPortResetHeapMinimumEverFreeHeapSize(void)
+{
+    taskENTER_CRITICAL();
+    {
+        xMinimumEverFreeBytesRemaining = xFreeBytesRemaining;
+    }
+    taskEXIT_CRITICAL();
+}
+/*-----------------------------------------------------------*/
+#endif
+
 static void prvInsertBlockIntoFreeList(BlockLink_t *pxBlockToInsert)
 {
 	BlockLink_t *pxIterator;

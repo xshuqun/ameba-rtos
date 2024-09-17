@@ -1,0 +1,1 @@
+/* connectedhomeip/src/platform/Ameba/AmebaOTAImageProcessor.h requires this header */

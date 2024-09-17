@@ -146,6 +146,11 @@ ifeq ($(CONFIG_802154_THREAD_EN), y)
 LINK_THIRD_APP_LIB += $(ROOTDIR)/lib/application/lib_openthread.a
 endif
 
+#matter
+ifeq ($(CONFIG_MATTER_EN), y)
+LINK_THIRD_APP_LIB += -Wl,--start-group -Wl,--whole-archive $(ROOTDIR)/lib/application/lib_main.a -Wl,--no-whole-archive $(ROOTDIR)/lib/application/libCHIP.a -Wl,--end-group # --whole-archive forces linker to override weak functions with strong ones
+endif
+
 #add all app lib in this file
 include $(MAKE_INCLUDE_LIB)
 
@@ -173,6 +178,41 @@ toolchain: download_toolchain
 
 linker_tfm: prebuild copy_ld_tfm make_subdirs_tfm
 tfm_s: linker_tfm
+
+#*****************************************************************************#
+#                         MATTER SUB DIRS                                     #
+#*****************************************************************************#
+
+all_clusters: prebuild copy_ld_img2
+	@make -C $(MATTER_BUILDDIR) all_clusters
+
+air_purifier: prebuild copy_ld_img2
+	@make -C $(MATTER_BUILDDIR) air_purifier
+
+aircon_port: prebuild copy_ld_img2
+	@make -C $(MATTER_BUILDDIR) aircon_port
+
+bridge_dm: prebuild copy_ld_img2
+	@make -C $(MATTER_BUILDDIR) bridge_dm
+
+dishwasher_port: prebuild copy_ld_img2
+	@make -C $(MATTER_BUILDDIR) dishwasher_port
+
+laundrywasher_port: prebuild copy_ld_img2
+	@make -C $(MATTER_BUILDDIR) laundrywasher_port
+
+light_port: prebuild copy_ld_img2
+	@make -C $(MATTER_BUILDDIR) light_port
+
+microwaveoven_port: prebuild copy_ld_img2
+	@make -C $(MATTER_BUILDDIR) microwaveoven_port
+
+oven_port: prebuild copy_ld_img2
+	@make -C $(MATTER_BUILDDIR) oven_port
+
+refrigerator_port: prebuild copy_ld_img2
+	@make -C $(MATTER_BUILDDIR) refrigerator_port
+
 #*****************************************************************************#
 #                      RULES TO CREATE DIRECTORY                              #
 #*****************************************************************************#
@@ -669,6 +709,13 @@ endif
 	@# #flashloader code start
 	@# @+$(MAKE) -C make/flashloader clean
 	@#+$(MAKE) -C $(TARGETDIR)/imgtool_floader clean
+
+ifeq ($(CONFIG_MATTER_EN), y)
+	@make -C $(MATTER_BUILDDIR)/make/chip_main clean
+	@make -C $(MATTER_BUILDDIR)/make/chip clean
+	@make -C $(MATTER_BUILDDIR)/make/application/matter clean
+	@rm -rf $(BASEDIR)/tools/matter/codegen_helpers/gen
+endif
 
 clean_xip:
 	@make -C make clean

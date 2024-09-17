@@ -15,6 +15,12 @@
 #include "platform_autoconf.h"
 #include "basic_types.h"
 
+#if defined(CHIP_PROJECT) && CHIP_PROJECT
+#ifndef IN
+#define IN
+#endif
+#endif
+
 extern _LONG_CALL_ SIZE_T _strlen(const char *s);
 extern _LONG_CALL_ int _strcmp(const char *cs, const char *ct);
 extern _LONG_CALL_ size_t _strlen(const char *s);
@@ -50,5 +56,11 @@ static inline int isodigit(const char c)
 {
 	return c >= '0' && c <= '7';
 }
+
+#if defined(CHIP_PROJECT) && CHIP_PROJECT
+#ifdef IN
+#undef IN
+#endif
+#endif
 
 #endif

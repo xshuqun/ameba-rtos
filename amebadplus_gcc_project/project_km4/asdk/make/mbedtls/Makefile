@@ -7,9 +7,16 @@ include $(MAKE_INCLUDE_GEN)
 #*****************************************************************************#
 #                                  VARIABLES                                  #
 #*****************************************************************************#
+ifeq ($(CONFIG_MATTER_EN),y)
+COMPONENT := mbedtls-2.28.1
+else
 COMPONENT := mbedtls-2.16.9
+endif
 
 COMPONENT_CLEAN := mbedtls-2.16.9
+ifeq ($(CONFIG_MATTER_EN),y)
+COMPONENT_CLEAN := mbedtls-2.28.1
+endif
 
 #*****************************************************************************#
 #                               Source FILE LIST                              #

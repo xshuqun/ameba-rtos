@@ -697,6 +697,9 @@ enum rtw_mode_type {
 	RTW_MODE_NONE	= 0,		///<none
 	RTW_MODE_STA		= 0x0001,	///<sta mode
 	RTW_MODE_AP		= 0x0002,	///<ap mode
+#if defined(CONFIG_MATTER) && CONFIG_MATTER
+	RTW_MODE_STA_AP		= 0x0003,	///<sta and ap mode
+#endif
 	RTW_MODE_NAN		= 0x0004,	///<nan mode
 	RTW_MODE_MAX
 };
@@ -791,6 +794,12 @@ enum rtw_event_indicate {
 	/* csi rx done event */
 	WIFI_EVENT_CSI_DONE,
 
+	/* matter modifications*/
+#if defined(CONFIG_MATTER) && CONFIG_MATTER
+	WIFI_EVENT_CONNECT,
+	WIFI_EVENT_DISCONNECT,
+	WIFI_EVENT_DHCP6_DONE,
+#endif
 	/* flash event */
 	WIFI_EVENT_DEAUTH_INFO_FLASH,
 #if defined (CONFIG_CLINTWOOD) && CONFIG_CLINTWOOD

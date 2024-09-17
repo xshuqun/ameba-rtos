@@ -6,16 +6,66 @@ include $(MAKE_INCLUDE_GEN)
 #*****************************************************************************#
 #                               VARIABLES	                              #
 #*****************************************************************************#
+ifeq ($(CONFIG_MATTER_SECURE_EN),y)
+DIR = $(BASEDIR)/component/ssl/mbedtls-2.28.1
+DIR_FWLIB = $(BASEDIR)/component/soc/amebadplus/fwlib/ram_km4
+else
 DIR = $(BASEDIR)/component/ssl/mbedtls-2.16.9
-DIR_RAMMAP = $(BASEDIR)/component/ssl/ssl_ram_map
+endif
+DIR_RAMMAP = $(BASEDIR)/component/ssl/mbedtls_ram_map
 
 MODULE_IFLAGS += -DCONFIG_BUILD_SECURE=1
+ifeq ($(CONFIG_MATTER_SECURE_EN),y)
+MODULE_IFLAGS += -I$(BASEDIR)/component/ssl/mbedtls_ram_map/rom
+MODULE_IFLAGS += -I$(BASEDIR)/component/soc/common/crashdump/include
+endif
 
+ifeq ($(CONFIG_MATTER_SECURE_EN),y)
+vpath %.c $(DIR) $(shell find $(DIR) -type d) $(DIR_RAMMAP) $(shell find $(DIR_RAMMAP) -type d) $(DIR_FWLIB)
+else
 vpath %.c $(DIR) $(shell find $(DIR) -type d) $(DIR_RAMMAP) $(shell find $(DIR_RAMMAP) -type d)
+endif
 
 #*****************************************************************************#
 #                               Source FILE LIST                              #
 #*****************************************************************************#
+ifeq ($(CONFIG_MATTER_SECURE_EN),y)
+CSRC = $(DIR)/library/aes.c			        \
+       $(DIR)/library/asn1parse.c		    \
+       $(DIR)/library/asn1write.c		    \
+       $(DIR)/library/base64.c			    \
+       $(DIR)/library/bignum.c			    \
+       $(DIR)/library/ccm.c			        \
+       $(DIR)/library/cipher.c			    \
+       $(DIR)/library/cipher_wrap.c         \
+       $(DIR)/library/constant_time.c       \
+       $(DIR)/library/ctr_drbg.c            \
+       $(DIR)/library/ecdsa.c			    \
+       $(DIR)/library/ecp.c			        \
+       $(DIR)/library/ecp_curves.c			\
+       $(DIR)/library/md.c			        \
+       $(DIR)/library/md5.c			        \
+       $(DIR)/library/oid.c		            \
+       $(DIR)/library/pkparse.c             \
+       $(DIR)/library/pkcs5.c			    \
+       $(DIR)/library/pkcs12.c			    \
+       $(DIR)/library/pem.c			        \
+       $(DIR)/library/pk.c			        \
+       $(DIR)/library/pkwrite.c             \
+       $(DIR)/library/pk_wrap.c			    \
+       $(DIR)/library/platform.c		    \
+       $(DIR)/library/platform_util.c		\
+       $(DIR)/library/rsa.c			        \
+       $(DIR)/library/rsa_internal.c		\
+       $(DIR)/library/sha1.c  			    \
+       $(DIR)/library/sha256.c			    \
+       $(DIR)/library/sha512.c			    \
+       $(DIR)/library/ssl_tls.c  		    \
+       $(DIR)/library/x509_create.c         \
+       $(DIR)/library/x509write_csr.c       \
+       $(DIR_RAMMAP)/rom/rom_ssl_ram_map.c  \
+       $(DIR_FWLIB)/ameba_app_start.c
+else
 CSRC = $(DIR)/library/aes.c			\
        $(DIR)/library/base64.c			\
        $(DIR)/library/oid.c			\
@@ -28,6 +78,7 @@ CSRC = $(DIR)/library/aes.c			\
        $(DIR)/library/ssl_tls.c			\
        $(DIR_RAMMAP)/ssl_ram_map.c		\
        $(DIR)/library/pkparse.c
+endif
 #*****************************************************************************#
 #                               Object FILE LIST                              #
 #*****************************************************************************#
