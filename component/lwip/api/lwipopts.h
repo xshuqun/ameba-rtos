@@ -67,9 +67,7 @@ a lot of data that needs to be copied, this should be set high. */
 #elif defined(CONFIG_AMEBALITE)
 #define MEM_SIZE                 (6*TCP_MSS)
 #elif defined(CONFIG_AMEBADPLUS)
-#define MEM_SIZE                 (7*1024)
-#elif defined(CONFIG_AMEBAGREEN2)
-#define MEM_SIZE                 (6*TCP_MSS)
+#define MEM_SIZE                 (30*1024)
 #elif defined(ENABLE_AMAZON_COMMON)
 #define MEM_SIZE                (10*1024)
 #else
@@ -105,7 +103,7 @@ a lot of data that needs to be copied, this should be set high. */
 #define MEMP_NUM_TCP_PCB_LISTEN 5
 /* MEMP_NUM_TCP_SEG: the number of simultaneously queued TCP
    segments. */
-#define MEMP_NUM_TCP_SEG        20
+#define MEMP_NUM_TCP_SEG        150
 /* MEMP_NUM_SYS_TIMEOUT: the number of simulateously active
    timeouts. */
 #define MEMP_NUM_SYS_TIMEOUT    10
@@ -121,7 +119,7 @@ a lot of data that needs to be copied, this should be set high. */
 #elif defined(ENABLE_AMAZON_COMMON)
 #define PBUF_POOL_SIZE          30
 #else
-#define PBUF_POOL_SIZE          20
+#define PBUF_POOL_SIZE          50 // setting 240 will have 29KB overflow, if 200 there is no overflow but malloc fail
 #endif
 
 /* IP_REASS_MAX_PBUFS: Total maximum amount of pbufs waiting to be reassembled.*/
@@ -134,7 +132,7 @@ a lot of data that needs to be copied, this should be set high. */
 #endif
 
 /* PBUF_POOL_BUFSIZE: the size of each pbuf in the pbuf pool. */
-#define PBUF_POOL_BUFSIZE       508
+#define PBUF_POOL_BUFSIZE       1600
 
 
 /* ---------- TCP options ---------- */
@@ -149,17 +147,17 @@ a lot of data that needs to be copied, this should be set high. */
 #define TCP_MSS                 (1500 - 40)	  /* TCP_MSS = (Ethernet MTU - IP header size - TCP header size) */
 
 /* TCP sender buffer space (bytes). */
-#define TCP_SND_BUF             (5*TCP_MSS)
+#define TCP_SND_BUF             (25*TCP_MSS)
 /*  TCP_SND_QUEUELEN: TCP sender buffer space (pbufs). This must be at least
   as much as (2 * TCP_SND_BUF/TCP_MSS) for things to work. */
-#define TCP_SND_QUEUELEN        (4* TCP_SND_BUF/TCP_MSS)
+#define TCP_SND_QUEUELEN        (6* TCP_SND_BUF/TCP_MSS)
 
 
 /* TCP receive window. */
 #if defined(CONFIG_AMEBASMART)
 #define TCP_WND                 (5*TCP_MSS)
 #elif defined(CONFIG_AMEBADPLUS)
-#define TCP_WND                 (5*TCP_MSS)
+#define TCP_WND                 (22*TCP_MSS)
 #elif defined(CONFIG_AMEBALITE)
 #define TCP_WND                 (5*TCP_MSS)
 #elif defined(CONFIG_AMEBAGREEN2)
@@ -473,6 +471,7 @@ Certain platform allows computing and verifying the IP, UDP, TCP and ICMP checks
  * LWIP_SOCKET==1: Enable Socket API (require to use sockets.c)
  */
 #define LWIP_SOCKET                     1
+#define LWIP_NETCONN_FULLDUPLEX         LWIP_SOCKET //@Semitron : add
 
 /*
    -----------------------------------
@@ -490,21 +489,20 @@ Certain platform allows computing and verifying the IP, UDP, TCP and ICMP checks
 */
 
 #define TCPIP_THREAD_STACKSIZE          1000
-#if defined(CONFIG_VIDEO_APPLICATION) && CONFIG_VIDEO_APPLICATION
-#define TCPIP_MBOX_SIZE                 600
-#define DEFAULT_UDP_RECVMBOX_SIZE       600
-#define DEFAULT_TCP_RECVMBOX_SIZE       600
-#define DEFAULT_RAW_RECVMBOX_SIZE       600
-#define DEFAULT_ACCEPTMBOX_SIZE         600
-#else
-#define TCPIP_MBOX_SIZE                 6
+#define TCPIP_MBOX_SIZE                 80
 #define DEFAULT_UDP_RECVMBOX_SIZE       6
-#define DEFAULT_TCP_RECVMBOX_SIZE       6
+#define DEFAULT_TCP_RECVMBOX_SIZE       80
 #define DEFAULT_RAW_RECVMBOX_SIZE       6
 #define DEFAULT_ACCEPTMBOX_SIZE         6
-#endif
 #define DEFAULT_THREAD_STACKSIZE        500
 #define TCPIP_THREAD_PRIO               (RTOS_TASK_MAX_PRIORITIES - 2)
+
+
+/* Added by clip */
+#define DNS_MAX_NAME_LENGTH             512
+#define SO_REUSE                        1
+#define LWIP_SO_LINGER                  1
+#define LWIP_SO_SNDTIMEO                1
 
 #if defined(CONFIG_HIGH_TP_TEST)
 #if defined(CONFIG_AMEBALITE) && defined (CONFIG_AS_INIC_AP)
@@ -575,10 +573,14 @@ Certain platform allows computing and verifying the IP, UDP, TCP and ICMP checks
 #define LWIP_AUTOIP                     1
 #define TCPIP_THREAD_NAME              "TCP_IP"
 #define LWIP_NETIF_API                  1
-#define LWIP_IPV6                       0
+#define LWIP_IPV6                       1
+#define LWIP_IPV6_MLD                   1
+#define LWIP_IPV6_AUTOCONFIG            1
+#define LWIP_ICMP6                      1
 #if LWIP_IPV6
 #undef  MEMP_NUM_SYS_TIMEOUT
 #define MEMP_NUM_SYS_TIMEOUT            13
+#define LWIP_IPV6_DHCP6                 1
 #endif
 
 #ifndef CONFIG_EXAMPLE_COAP_SERVER

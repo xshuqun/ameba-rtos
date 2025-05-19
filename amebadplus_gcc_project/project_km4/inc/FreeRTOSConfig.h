@@ -121,7 +121,7 @@ extern uint32_t SystemCoreClock;
 #else
 #define configTIMER_QUEUE_LENGTH				10
 #endif
-#define configTIMER_TASK_STACK_DEPTH					( 512  )
+#define configTIMER_TASK_STACK_DEPTH					( 512  ) //setting 4096 will have overflow by 14336 bytes
 
 /* Set the following definitions to 1 to include the API function, or zero
  * to exclude the API function.  NOTE:  Setting an INCLUDE_ parameter to 0 is
