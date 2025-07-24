@@ -433,6 +433,15 @@ void vPortFree(void *pv)
 }
 /*-----------------------------------------------------------*/
 
+#if defined(CONFIG_MATTER_SECURE) && CONFIG_MATTER_SECURE
+void* pvPortReAlloc( void *pv,  size_t xWantedSize )
+{
+	/* This just exists to keep the linker quiet. */
+	return NULL;
+}
+#endif // defined(CONFIG_MATTER_SECURE) && CONFIG_MATTER_SECURE
+/*-----------------------------------------------------------*/
+
 size_t xPortGetFreeHeapSize(void)
 {
 	return xFreeBytesRemaining;

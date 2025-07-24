@@ -45,3 +45,10 @@ ameba_list_append(c_GLOBAL_MCU_COMPILE_CPP_OPTIONS
     ${c_GLOBAL_MCU_COMPILE_C_OPTIONS}
 )
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ #
+
+# ++++++++++++++++++++++ MATTER MODIFICATIONS ++++++++++++++++++++++ #
+if(CONFIG_MATTER_EN)
+    list(REMOVE_ITEM c_GLOBAL_MCU_COMPILE_DEFINES  MBEDTLS_CONFIG_FILE="mbedtls/config.h")
+    ameba_list_append(c_GLOBAL_MCU_COMPILE_DEFINES MBEDTLS_CONFIG_FILE="matter_mbedtls_config.h")
+endif()
+# ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ #

@@ -28,7 +28,9 @@
 #include "mbedtls/config_thread.h"
 #else
 
-#if defined(CONFIG_AMEBAGREEN2) || defined(CONFIG_AMEBAL2)
+#if defined(CONFIG_MATTER) && CONFIG_MATTER
+#include "matter_mbedtls_config.h"
+#elif defined(CONFIG_AMEBAGREEN2) || defined(CONFIG_AMEBAL2)
 #include "ameba.h"
 #include "mbedtls/mbedtls_config_green2.h"
 #else

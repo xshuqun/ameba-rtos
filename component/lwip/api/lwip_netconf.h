@@ -16,8 +16,15 @@ extern "C" {
 #endif
 
 /* Includes ------------------------------------------------------------------*/
+#if defined(CHIP_PROJECT) && CHIP_PROJECT
+#include "lwip/init.h"
+#include "lwip/tcpip.h"
+#include "lwip/err.h"
+#else
 #include "lwipconf.h"
+#endif
 
+extern struct netif xnetif[];
 extern unsigned char ap_ip[4], ap_netmask[4], ap_gw[4];
 // macros
 /* Give default value if not defined */

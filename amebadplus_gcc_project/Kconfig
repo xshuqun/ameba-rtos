@@ -132,6 +132,8 @@ menu "CONFIG APPLICATION"
 
     orsource "${RTK_APP_DIR}/Kconfig"
 
+    orsource "../component/application/matter/project/cmake/Kconfig"
+
 endmenu
 
 

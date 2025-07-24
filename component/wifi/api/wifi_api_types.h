@@ -673,8 +673,19 @@ struct rtw_acs_mntr_rpt {
   * @brief  Contains details of a scanned AP.
   */
 struct rtw_scan_result {
+#if defined(CONFIG_MATTER) && CONFIG_MATTER
+	union { /**< SSID of the AP. */
+		struct rtw_ssid    SSID;
+		struct rtw_ssid    ssid;
+	};
+	union { /**< BSSID (MAC address) of the AP. */
+		struct rtw_mac    BSSID;
+		struct rtw_mac    bssid;
+	};
+#else
 	struct rtw_ssid    ssid;             /**< SSID of the AP. */
 	struct rtw_mac     bssid;            /**< BSSID (MAC address) of the AP. */
+#endif
 	s16                signal_strength;  /**< Receive Signal Strength Indication (RSSI) in dBm: <-90 Very poor, >-30 Excellent. */
 	u8				   bss_type;         /**< BSS type. Common value: @ref RTW_BSS_TYPE_INFRASTRUCTURE.*/
 	u32                security;         /**< Security type of the AP: @ref RTW_SECURITY_OPEN, @ref RTW_SECURITY_WEP_PSK, etc. */

@@ -51,6 +51,9 @@
 #elif defined(CONFIG_WHC_INTF_USB)
 #include "whc_usb_dev.h"
 #endif
+#if defined(CONFIG_MATTER) && CONFIG_MATTER
+#include "matter_wifis.h"
+#endif
 
 #define WIFI_STACK_SIZE_INIT ((512 + 768) * 4)
 
@@ -68,7 +71,11 @@ void wifi_init_thread(void *param)
 	whc_host_init();
 
 #ifndef CONFIG_WHC_BRIDGE_HOST
+#if defined(CONFIG_MATTER) && CONFIG_MATTER
+	matter_wifi_init();
+#else
 	wifi_on(RTW_MODE_STA);
+#endif
 
 	RTK_LOGI(TAG_WLAN_DRV, "Available heap after wifi init %d\n", rtos_mem_get_free_heap_size() + WIFI_STACK_SIZE_INIT);
 #endif
@@ -112,7 +119,11 @@ void wifi_init_thread(void *param)
 	whc_dev_init_lite();
 #endif
 
+#if defined(CONFIG_MATTER) && CONFIG_MATTER
+	matter_wifi_init();
+#else
 	wifi_on(RTW_MODE_STA);
+#endif
 
 	RTK_LOGI(TAG_WLAN_DRV, "Available heap after wifi init %d\n", rtos_mem_get_free_heap_size() + WIFI_STACK_SIZE_INIT);
 

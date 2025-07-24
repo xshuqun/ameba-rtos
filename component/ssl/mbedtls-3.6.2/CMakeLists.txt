@@ -18,9 +18,15 @@ ameba_list_append(public_includes
     ../mbedtls_ram_map/rom
 )
 
+if(CONFIG_MATTER_EN)
+ameba_list_append(public_definitions
+    MBEDTLS_CONFIG_FILE="matter_mbedtls_config.h"
+)
+else()
 ameba_list_append(public_definitions
     MBEDTLS_CONFIG_FILE="mbedtls/config.h"
 )
+endif()
 # Component public part, user config end
 #----------------------------------------#
 
@@ -144,6 +150,7 @@ ameba_list_append(private_sources
     library/bignum_core.c
     library/bignum.c
     library/sha1.c
+    library/sha3.c
     library/md.c
     library/md5.c
     library/ecdh.c

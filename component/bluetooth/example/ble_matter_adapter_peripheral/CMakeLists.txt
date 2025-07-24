@@ -9,10 +9,6 @@ set(public_libraries)               #public libraries(files), NOTE: linked with 
 #----------------------------------------#
 # Component public part, user config begin
 
-# You may use if-else condition to set or update predefined variable above
-ameba_list_append(public_includes
-    ${CMAKE_CURRENT_SOURCE_DIR}
-)
 # Component public part, user config end
 #----------------------------------------#
 
@@ -38,25 +34,24 @@ set(private_compile_options)         #private compile_options
 
 #------------------------------#
 # Component private part, user config begin
-if((${c_CURRENT_IMAGE_TYPE} STREQUAL "image3") AND CONFIG_MATTER_SECURE_EN)
-ameba_list_append(private_sources
-    log.c
-    gcc_wrap.c
+
+ameba_list_append(private_includes
+    ${c_CMPT_BLUETOOTH_DIR}/rtk_stack/inc/os
+    ${c_CMPT_BLUETOOTH_DIR}/example/gatt_service/server
 )
-else()
+
 ameba_list_append(private_sources
-    log.c
-    locks.c
-    sscanf_minimal.c
+    ble_matter_adapter_peripheral_main.c
+    ble_matter_adapter_service.c
 )
-endif()
+
 # Component private part, user config end
 #------------------------------#
 
 #WARNING: Select right API based on your component's release/not-release/standalone
 
 ###NOTE: For open-source component, always build from source
-ameba_add_internal_library(swlib
+ameba_add_internal_library(ble_mesh_device
     p_SOURCES
         ${private_sources}
     p_INCLUDES

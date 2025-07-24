@@ -168,4 +168,8 @@ extern unsigned int sys_now(void);
 #define LWIP_NETCONN_THREAD_SEM_FREE()    sys_thread_sem_deinit()
 #endif
 
+#if defined(CONFIG_MATTER) && CONFIG_MATTER
+#include "lwipopts_matter.h"
+#endif
+
 #endif /* LWIP_HDR_LWIPOPTS_H */

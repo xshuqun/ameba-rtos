@@ -124,6 +124,10 @@ ameba_add_subdirectory_if(CONFIG_BT_SPP
     bt_spp
 )
 
+ameba_add_subdirectory_if(CONFIG_BLE_MATTER_ADAPTER
+    ble_matter_adapter_peripheral
+)
+
 if(CONFIG_BT_WIFIMATE_DEVICE OR CONFIG_BT_WIFIMATE_CONFIGURATOR)
     ameba_add_subdirectory(
         ble_wifimate

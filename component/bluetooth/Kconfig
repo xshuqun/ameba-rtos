@@ -22,6 +22,11 @@ config BT_EXAMPLE_DEMO_MENU
     default n
 
 if BT_EXAMPLE_DEMO_MENU
+    config BLE_MATTER_ADAPTER
+        depends on MATTER_EN
+        bool "BLE Matter Adapter"
+        default n
+
     config BT_PERIPHERAL
         bool "BLE Peripheral"
         default n

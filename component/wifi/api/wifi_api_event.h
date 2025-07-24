@@ -71,6 +71,11 @@ enum rtw_event_id {
 	RTW_EVENT_WPA_WPS_FINISH,         /**< STA mode: WPS procedure completed */
 	RTW_EVENT_WPA_EAPOL_START,        /**< STA mode: WPA enterprise authentication started */
 	RTW_EVENT_WPA_EAPOL_RECVD,        /**< STA mode: EAPOL packet received during WPA enterprise authentication */
+#if defined(CONFIG_MATTER) && CONFIG_MATTER /**< STA mode: To support Matter WiFi events */
+	RTW_EVENT_MATTER_STA_CONN,
+	RTW_EVENT_MATTER_STA_DISCONN,
+	RTW_EVENT_DHCP6_DONE,
+#endif
 	RTW_EVENT_MAX,
 };
 /** @} End of WIFI_Exported_Enumeration_Types group*/

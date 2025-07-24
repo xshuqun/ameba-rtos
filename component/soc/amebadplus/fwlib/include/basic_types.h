@@ -315,4 +315,8 @@ typedef     u32 dma_addr_t;
 #define CLEAR_FLAGS(__Flag)					((__Flag) = 0)
 #define TEST_FLAGS(__Flag, __testFlags)		(((__Flag) & (__testFlags)) == (__testFlags))
 
+#if defined(CHIP_PROJECT) && CHIP_PROJECT
+#include "basic_types_matter.h"
+#endif
+
 #endif// __BASIC_TYPES_H__
