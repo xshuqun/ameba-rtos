@@ -1391,6 +1391,54 @@ void spi_disable(spi_t *obj)
 	}
 }
 
+/**
+  * @brief Get SPI interrupt status.
+  * @param  obj: SPI object defined in application software.
+  * @return SPI interrupt status.
+*/
+uint32_t spi_interrupt_status_get(spi_t *obj)
+{
+	uint8_t spi_idx = obj->spi_idx & 0x01;
+	PHAL_SSI_ADAPTOR ssi_adapter = &ssi_adapter_g[spi_idx];
+
+	return (uint32_t)SSI_GetIsr(ssi_adapter->spi_dev);
+}
+
+/**
+  * @brief Get SPI status
+  * @param  obj: SPI object defined in application software.
+  * @return SPI status.
+*/
+uint32_t spi_status_get(spi_t *obj)
+{
+	uint8_t spi_idx = obj->spi_idx & 0x01;
+	PHAL_SSI_ADAPTOR ssi_adapter = &ssi_adapter_g[spi_idx];
+
+	return (uint32_t)SSI_GetStatus(ssi_adapter->spi_dev);
+}
+
+/**
+  * @brief Get SPI remaining data length in current transmission.
+  * @param  obj: SPI object defined in application software.
+  * @return Remaining data length in current transmission in units of byte.
+*/
+
+uint32_t spi_remained_read_length_get(spi_t *obj)
+{
+	uint8_t spi_idx = obj->spi_idx & 0x01;
+	PHAL_SSI_ADAPTOR ssi_adapter = &ssi_adapter_g[spi_idx];
+	SPI_TypeDef *SPIx = SPI_DEV_TABLE[spi_idx].SPIx;
+
+	if (obj->state & SPI_STATE_RX_BUSY) {
+		if (SSI_GetDataFrameSize(SPIx) > 8) {
+			return (uint32_t)(ssi_adapter->RxLength >> 1);
+		} else {
+			return (uint32_t)ssi_adapter->RxLength;
+		}
+	} else {
+		return 0;
+	}
+}
 /** @} */
 /** @} */
 /** @} */

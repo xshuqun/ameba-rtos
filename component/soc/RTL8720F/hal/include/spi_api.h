@@ -79,7 +79,9 @@ int  spi_busy(spi_t *obj);
 void spi_flush_rx_fifo(spi_t *obj);
 void spi_enable(spi_t *obj);
 void spi_disable(spi_t *obj);
-
+uint32_t spi_interrupt_status_get(spi_t *obj);
+uint32_t spi_status_get(spi_t *obj);
+uint32_t spi_remained_read_length_get(spi_t *obj);
 
 #ifdef __cplusplus
 }

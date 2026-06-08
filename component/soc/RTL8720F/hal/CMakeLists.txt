@@ -51,7 +51,7 @@ ameba_list_append(private_sources
     src/gpio_irq_api.c
     src/pinmap.c
     src/port_api.c
-    src/spi_api.c
+    #src/spi_api.c
     src/serial_api.c
     src/i2c_api.c
     src/pwmout_api.c
