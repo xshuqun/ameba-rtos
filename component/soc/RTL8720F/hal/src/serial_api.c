@@ -35,6 +35,17 @@ static const char *const TAG = "SERIAL";
 #define RX_CLK_XTAL40M		40000000
 #define RX_CLK_OSC2M		2000000
 
+#if defined(CLIP_PROJECT) && (CLIP_PROJECT == 1) 
+static void uart_delay(uint32_t delay)
+{
+    if (delay == 0)
+        return;
+
+#if defined(INCLUDE_vTaskDelay) && (INCLUDE_vTaskDelay == 1)
+    vTaskDelay(delay);
+#endif
+}
+#endif
 /** @addtogroup Ameba_Mbed_API
  * @{
  */
@@ -634,6 +645,24 @@ int serial_getc(serial_t *obj)
 	return (int)RxByte;
 }
 
+int serial_getc_new(serial_t *obj)
+{
+	PMBED_UART_ADAPTER puart_adapter = &(uart_adapter[obj->uart_idx]);
+	u8 RxByte = 0;
+
+	UART_CharGet(puart_adapter->UARTx, &RxByte);
+
+	return (int)RxByte;
+}
+
+void serial_rx_flush(serial_t *obj)
+{
+	PMBED_UART_ADAPTER puart_adapter = &(uart_adapter[obj->uart_idx]);
+
+	while (serial_readable(obj)) {
+		UART_CharGet(puart_adapter->UARTx, NULL);
+	}
+}
 /**
  * @brief Send one byte data through UART.
  * @param obj UART object defined in application software.
@@ -652,6 +681,25 @@ void serial_putc(serial_t *obj, int c)
 		// UnMask TX FIFO empty IRQ
 		UART_INTConfig(puart_adapter->UARTx, RUART_BIT_ETBEI, ENABLE);
 	}
+}
+
+void serial_puts(serial_t *obj, const unsigned char* string, uint32_t nbytes)
+{
+	unsigned int i = 0;
+	while (i < nbytes) {
+		serial_putc(obj, *(string + i));
+		i++;
+	}
+}
+
+void serial_putc_direct(serial_t *obj, int c)
+{
+    serial_putc(obj, c);
+}
+
+void serial_puts_direct(serial_t *obj, const unsigned char* string, uint32_t nbytes)
+{
+    serial_puts(obj, string, nbytes);
 }
 
 /**
@@ -1086,6 +1134,10 @@ void serial_clear_rx(serial_t *obj)
 	UART_ClearRxFifo(UARTx);
 }
 
+void serial_pinout_tx(PinName tx)
+{
+    pinmap_pinout(tx, NULL);
+}
 /**
  * @brief Receive data of target length under polling mode before timeout.
  * @param obj UART object defined in application software.
@@ -1401,6 +1453,46 @@ void serial_set_flow_control(serial_t *obj, FlowControl type, PinName rxflow, Pi
 	UARTx->MCR |= RUART_BIT_RTS;
 }
 
+void serial_rts_control(serial_t *obj, bool rts_state)
+{
+	(void)obj;
+	(void)rts_state;
+	RTK_LOGI(NOTAG, "no matter auto flow control is enabled or disabled, RTS pin should be always Low, and thus peer can send data");
+    
+}
+
+// to hook lock/unlock function for multiple-thread application
+void serial_hook_lock(serial_t *obj, void *lock, void *unlock, uint32_t id)
+{
+	(void)obj;
+	(void)lock;
+	(void)unlock;
+	(void)id;
+}
+
+/*refer to ameba_uart.h for LSR definition*/
+uint8_t serial_read_lsr(serial_t *obj)
+{
+	PMBED_UART_ADAPTER puart_adapter = &(uart_adapter[obj->uart_idx]);
+	
+	return UART_LineStatusGet(puart_adapter->UARTx);
+}
+
+uint8_t serial_read_msr(serial_t *obj)
+{
+	PMBED_UART_ADAPTER puart_adapter = &(uart_adapter[obj->uart_idx]);
+	
+	return UART_ModemStatusGet(puart_adapter->UARTx);
+}
+
+void serial_wait_tx_done(serial_t *obj)
+{
+	int i = 0;
+	while( (!(serial_read_lsr(obj) & RUART_BIT_TX_EMPTY )) &&  i < 200 ) {
+        i++;
+        uart_delay(1);
+    }
+}
 /** @} */
 /** @} */
 /** @} */
