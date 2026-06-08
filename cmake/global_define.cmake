@@ -36,6 +36,7 @@ ameba_set(c_EMPTY_C_OBJECT_FILE)    # File used like empty_file.c
 #-------------------------#
 
 # Define static dirs under component/
+ameba_set(c_CMPT_BSPADAPTER_DIR   ${c_BASEDIR}/../bsp_adapter)
 ameba_set(c_CMPT_AIVOICE_DIR      ${c_COMPONENT_DIR}/aivoice)
 ameba_set(c_CMPT_APP_DIR          ${c_COMPONENT_DIR}/application)
 ameba_set(c_CMPT_AT_CMD_DIR       ${c_COMPONENT_DIR}/at_cmd)
