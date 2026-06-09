@@ -47,7 +47,7 @@ ameba_list_append(private_sources
     src/us_ticker.c
     src/timer_api.c
     src/dma_api.c
-    src/gpio_api.c
+    #src/gpio_api.c
     src/gpio_irq_api.c
     src/pinmap.c
     src/port_api.c
