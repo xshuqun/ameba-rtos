@@ -62,10 +62,13 @@ ameba_list_append(private_sources
     src/wait_api.c
     src/rtc_api.c
     src/spdio_api.c
+    src/reset_reason_api.c
 )
 
 ameba_list_append(private_includes
     ${c_MBEDTLS_DIR}/include
+    ${c_CMPT_BSPADAPTER_DIR}/CLIP_LIB/include/porting
+
 )
 # Component private part, user config end
 #------------------------------#
