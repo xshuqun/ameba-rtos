@@ -49,7 +49,7 @@ void BOOT_RccConfig(void)
 	RCC_PeriphClockCmd(APBPeriph_PTIM0, APBPeriph_PTIM0_CLOCK, ENABLE);
 	RCC_PeriphClockCmd(APBPeriph_PTIM1, APBPeriph_PTIM1_CLOCK, ENABLE);
 	RCC_PeriphClockCmd(APBPeriph_DMAC, APBPeriph_DMAC_CLOCK, ENABLE);
-
+	RCC_PeriphClockCmd(APBPeriph_RTC, APBPeriph_RTC_CLOCK, ENABLE);
 	SDM32K_Enable();
 }
 
