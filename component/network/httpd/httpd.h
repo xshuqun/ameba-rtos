@@ -56,6 +56,11 @@ struct http_request {
 	size_t content_len;              /*!< Value of Content-Length header field parsed in HTTP header string */
 };
 
+// [LGE] HTTPD connection removal callback support
+struct httpd_conn;
+typedef void (*httpd_conn_removed_cb_t)(struct httpd_conn *conn);
+// End of LGE
+
 /**
   * @brief  The structure is the context used for client connection.
   */
@@ -65,6 +70,8 @@ struct httpd_conn {
 	void *tls;                       /*!< Context for TLS connection */
 	char *response_header;        /*!< Pointer to transmission buffer of HTTP response header */
 	uint32_t last_req_time;          /*!< Last request time in system ticks */
+
+	httpd_conn_removed_cb_t on_remove; /* [LGE] HTTPD connection removal callback support */
 };
 
 /* Request Methods */

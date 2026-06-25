@@ -435,7 +435,7 @@
 #endif
 
 #ifndef configINCLUDE_FREERTOS_TASK_C_ADDITIONS_H
-#define configINCLUDE_FREERTOS_TASK_C_ADDITIONS_H    0
+#define configINCLUDE_FREERTOS_TASK_C_ADDITIONS_H    1
 #endif
 
 	/* The following event macros are embedded in the kernel API calls. */

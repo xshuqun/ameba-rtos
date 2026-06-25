@@ -4,6 +4,8 @@
 #include "httpd_util.h"
 
 
+#define HTTPD_SOCK_CLOSE_DURING_HTTPD_STOP 1    // LG Add define
+
 // setting
 #define HTTPD_DEFAULT_PORT             80
 #define HTTPD_DEFAULT_SECURE_PORT      443
@@ -292,7 +294,13 @@ static void httpd_server_thread(void *param)
 			}
 		}
 
+#if defined(HTTPD_SOCK_CLOSE_DURING_HTTPD_STOP) && (HTTPD_SOCK_CLOSE_DURING_HTTPD_STOP == 1)   //@Noah
+		int ret = 0;
+		ret = select(httpd_max_sock + 1, &read_fds, NULL, NULL, &timeout);
+		if (ret > 0) {
+#else
 		if (select(httpd_max_sock + 1, &read_fds, NULL, NULL, &timeout)) {
+#endif
 			if (FD_ISSET(httpd_sock, &read_fds)) {
 				struct sockaddr_in client_addr;
 				unsigned int client_addr_size = sizeof(client_addr);
@@ -393,10 +401,17 @@ static void httpd_server_thread(void *param)
 					}
 				}
 			}
+#if defined(HTTPD_SOCK_CLOSE_DURING_HTTPD_STOP) && (HTTPD_SOCK_CLOSE_DURING_HTTPD_STOP == 1)   //@Noah
+		} else if(ret == 0) {
+			httpd_log_verbose("select: timeout");
+		} else {
+			httpd_log_verbose("select : socket exit");
+		}
+#else
 		} else {
 			httpd_log_verbose("select");
 		}
-
+#endif
 		// check idle timeout for single-thread mode. idle timeout for multi-thread mode will be check in conn thread
 		if ((httpd_thread_mode == HTTPD_THREAD_SINGLE) && httpd_idle_timeout_enabled) {
 			int i;
@@ -410,6 +425,18 @@ static void httpd_server_thread(void *param)
 		}
 	}
 
+#if defined(HTTPD_SOCK_CLOSE_DURING_HTTPD_STOP) && (HTTPD_SOCK_CLOSE_DURING_HTTPD_STOP == 1)   //@Noah
+	// need to close client sockets when immediately stopping server.
+	if (httpd_thread_mode == HTTPD_THREAD_SINGLE) {
+		int i;
+
+		for (i = 0; i < httpd_max_conn; i ++) {
+			if (httpd_connections[i].sock >= 0) {
+				httpd_conn_close(&httpd_connections[i]);
+			}
+		}
+	}
+#endif
 	httpd_deinit();
 	httpd_log("%s stopped", __FUNCTION__);
 	httpd_running = 0;
@@ -681,6 +708,13 @@ int httpd_start_with_callback(uint16_t port, uint8_t max_conn, uint32_t stack_by
 void httpd_stop(void)
 {
 	httpd_do_stop = 1;
+
+#if defined(HTTPD_SOCK_CLOSE_DURING_HTTPD_STOP) && (HTTPD_SOCK_CLOSE_DURING_HTTPD_STOP == 1)   //@Noah
+	if (httpd_sock != -1) {
+		close(httpd_sock);
+		httpd_sock = -1;
+	}
+#endif
 }
 
 int httpd_is_running(void)

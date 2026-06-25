@@ -87,6 +87,18 @@ void httpd_page_clear(void)
 	httpd_page_database = NULL;
 }
 
+// [LGE] HTTPD connection removal callback support
+_WEAK void httpd_conn_remove_cb_func(struct httpd_conn *conn)
+{
+	printf("Removing connection: socket %d\n", conn->sock);
+}
+
+void httpd_conn_register_remove_cb(struct httpd_conn *conn, void (*callback)(struct httpd_conn *conn))
+{
+	conn->on_remove = callback;
+}
+// End of LGE
+
 struct httpd_conn *httpd_conn_add(int sock)
 {
 	int i;
@@ -111,6 +123,12 @@ void httpd_conn_detach(struct httpd_conn *conn)
 void httpd_conn_remove(struct httpd_conn *conn)
 {
 	int i;
+
+	// [LGE] HTTPD connection removal callback support
+	if (conn->on_remove) {
+		conn->on_remove(&httpd_connections[i]);
+	}
+	// End of LGE
 
 	for (i = 0; i < httpd_max_conn; i ++) {
 		if (&httpd_connections[i] == conn) {

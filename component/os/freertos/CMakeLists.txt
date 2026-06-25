@@ -10,6 +10,7 @@ set(public_libraries)               #public libraries(files), NOTE: linked with 
 # Component public part, user config begin(DO NOT remove this line)
 # You may use if-else condition to set or update predefined variable above
 
+message(STATUS "==>FREERTOS: ${CMAKE_CURRENT_SOURCE_DIR}")
 if(CONFIG_AMEBASMART)
     if("${c_MCU_PROJECT_NAME}" STREQUAL "ap")
         set(portable_soc_mcu_dir ${c_FREERTOS_DIR}/portable/GCC/ARM_CA32)
@@ -42,6 +43,7 @@ ameba_list_append(public_includes
     ${c_CMPT_OS_DIR}/freertos/os_wrapper/include
     ${c_CMPT_OS_DIR}/os_wrapper/include
     ${portable_soc_mcu_dir}
+    ${CMAKE_CURRENT_SOURCE_DIR}/../../../../bsp_adapter/config
 )
 
 ameba_list_append(public_includes

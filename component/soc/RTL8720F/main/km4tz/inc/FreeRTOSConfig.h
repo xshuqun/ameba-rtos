@@ -98,6 +98,7 @@ extern uint32_t SystemCoreClock;
 #define configUSE_QUEUE_SETS							1
 #define configUSE_TASK_NOTIFICATIONS					1
 #define configUSE_TRACE_FACILITY						1
+#define configUSE_TRACE_FACILITY2						1
 #define configSUPPORT_STATIC_ALLOCATION					1
 #define configNUM_THREAD_LOCAL_STORAGE_POINTERS			2
 #define configUSE_POSIX_ERRNO							1
@@ -134,7 +135,7 @@ extern uint32_t SystemCoreClock;
 #define INCLUDE_vTaskDelayUntil							1
 #define INCLUDE_vTaskDelay								1
 #define INCLUDE_pcTaskGetTaskName       				1
-#define INCLUDE_uxTaskGetStackHighWaterMark				0
+#define INCLUDE_uxTaskGetStackHighWaterMark				1
 #define INCLUDE_xTaskGetIdleTaskHandle					0
 #define INCLUDE_eTaskGetState							1
 #define INCLUDE_xTaskResumeFromISR						0
